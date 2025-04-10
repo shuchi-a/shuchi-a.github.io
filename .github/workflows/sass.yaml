@@ -1,0 +1,38 @@
+name: SASS Compilation
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '**.scss'
+      - '.github/workflows/sass.yml'
+  workflow_dispatch:  # Keeps manual trigger option
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Add explicit permission to write to the repository
+    steps:
+      - uses: actions/checkout@v3  # Use a newer version
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}  # Explicitly use the token
+          
+      - name: Set up Node.js
+        uses: actions/setup-node@v3  # Use a newer version
+        with:
+          node-version: '16'
+          
+      - name: Install dependencies
+        run: npm install -g sass
+        
+      - name: Compile SASS
+        run: sass styles.scss:styles.css
+        
+      - name: Commit compiled CSS
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "GitHub Actions"
+          git add styles.css
+          git commit -m "Compile SASS to CSS" || echo "No changes to commit"
+          git push

@@ -1,0 +1,10 @@
+# Allow Google to crawl the site
+User-agent: Googlebot
+Allow: /
+
+# Disallow all other crawlers
+User-agent: *
+Disallow: /
+
+# Sitemap location (add this once you have a sitemap)
+# Sitemap: https://shuchi.cc/sitemap.xml
